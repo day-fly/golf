@@ -37,7 +37,7 @@ logging:
 server:
   port: 5001
   servlet:
-    context-path: /java
+    context-path: /
 springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json

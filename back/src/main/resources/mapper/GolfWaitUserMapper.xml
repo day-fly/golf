@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golf.biz.waitUser.mapper.GolfWaitUserMapper">
+
+    <select id="getList" resultType="com.golf.biz.waitUser.entity.GolfWaitUser">
+        select id, user_name, user_dong, user_ho, wait_time
+        from golf_wait_user
+    </select>
+
+    <update id="insert">
+        insert into golf_wait_user(user_name, user_dong, user_ho, wait_time)
+        values (#{userName}, #{userDong}, #{userHo}, #{waitTime})
+    </update>
+
+</mapper>

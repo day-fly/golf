@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.golf.box.mapper.GolfBoxMapper">
+<mapper namespace="com.golf.biz.box.mapper.GolfBoxMapper">
 
-    <select id="getList" resultType="com.golf.box.entity.GolfBox">
-        select golf_box_id
-             ,golf_box_name
-             ,golf_box_use_yn
-             ,box_user_id
-             ,box_start_time
-             ,box_end_time
+    <select id="getList" resultType="com.golf.biz.box.entity.GolfBox">
+        select id, name, use_yn, user_name, user_dong, user_ho, start_time, end_time, disable_yn
         from golf_box
     </select>
+
+    <update id="update">
+        update golf_box
+           set use_yn = #{useYn}
+              ,user_name = #{userName}
+              ,user_dong = #{userDong}
+              ,user_ho = #{userHo}
+              ,start_time = #{startTime}
+              ,end_time = #{endTime}
+         where id = #{id}
+    </update>
 
 </mapper>

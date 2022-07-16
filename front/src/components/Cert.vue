@@ -22,7 +22,7 @@ export default {
   mounted() {
     count = 0
     axios.post(
-        `http://${this.$static.SERVER_IP}/java/order/cancel`
+        `http://${this.$static.SERVER_IP}/order/cancel`
     ).then(() => {
       clearInterval(interval)
       interval = setInterval(() => this.checkUser(), 2000)
@@ -41,7 +41,7 @@ export default {
         this.$router.push('/')
       }
       axios
-          .get(`http://${this.$static.SERVER_IP}/java/user/`)
+          .get(`http://${this.$static.SERVER_IP}/user/`)
           .then(response => {
             const data = response.data
             if (data.userDongHo !== null) {
@@ -59,6 +59,28 @@ export default {
           .catch(() => {
             this.$router.push('error')
           })
+    },
+    checkUserStatus() {
+      axios
+          .get(`http://${this.$static.SERVER_IP}/user/`)
+          .then(response => {
+            const data = response.data
+            if (data.userDongHo !== null) {
+              clearInterval(interval)
+
+              this.$router.push({
+                name: 'order', params: {
+                  userDong: data.userDongHo.split('-')[0],
+                  userHo: data.userDongHo.split('-')[1],
+                  userName: data.userName
+                }
+              })
+            }
+          })
+          .catch(() => {
+            this.$router.push('error')
+          })
+
     }
   }
 }

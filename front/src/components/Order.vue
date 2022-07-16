@@ -197,33 +197,28 @@ export default {
         { passive: false }
     )
 
-    this.getOrderList()
+    //this.getOrderList()
 
     this.$q.loading.show()
     axios
-        .get(`http://${this.$static.SERVER_IP}/java/menu/list`)
+        .get(`http://${this.$static.SERVER_IP}/box/list`)
         .then(response => {
-          const menu1Levels = response.data.filter((obj) => obj.parentId === null)
-          const menu2Levels = response.data.filter((obj) => obj.parentId !== null)
-
-          menu1Levels.sort((a, b) => (a.menuIndex > b.menuIndex ? 1 : -1))
-          this.menu1Levels = menu1Levels
-          this.menu2Levels = menu2Levels
+          console.log(response.data)
           this.$q.loading.hide()
         })
   },
   methods: {
-    async getOrderList() {
-      await axios
-          .get(`http://${this.$static.SERVER_IP}/java/order/list`)
-          .then(response => {
-            console.log(response.data)
-            this.orderSeq = response.data.length + 1
-            console.log('orderSeq : ', this.orderSeq)
-          }).catch(() => {
-
-          })
-    },
+    // async getOrderList() {
+    //   await axios
+    //       .get(`http://${this.$static.SERVER_IP}/java/order/list`)
+    //       .then(response => {
+    //         console.log(response.data)
+    //         this.orderSeq = response.data.length + 1
+    //         console.log('orderSeq : ', this.orderSeq)
+    //       }).catch(() => {
+    //
+    //       })
+    // },
     cancelOrder(){
       axios.post(
           `http://${this.$static.SERVER_IP}/java/order/cancel`
@@ -254,24 +249,6 @@ export default {
       } else {
         existOrder.qty += 1
       }
-      this.calTotalPrice()
-    },
-    addQty(order) {
-      this.delayTime = 0
-      order.qty += 1
-      this.calTotalPrice()
-    },
-    minusQty(order) {
-      this.delayTime = 0
-      if (order.qty > 1) {
-        order.qty -= 1
-        this.calTotalPrice()
-      }
-    },
-    deleteOrder(order) {
-      this.delayTime = 0
-      const orders = this.orders.filter((obj) => order.id !== obj.id)
-      this.orders = orders
       this.calTotalPrice()
     },
     completeOrders() {

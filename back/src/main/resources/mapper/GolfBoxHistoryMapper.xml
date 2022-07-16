@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golf.biz.boxHistory.mapper.GolfBoxHistoryMapper">
+
+    <select id="getList" resultType="com.golf.biz.boxHistory.entity.GolfBoxHistory">
+        select id, yyyymmdd, user_dong, user_ho, box_id, box_end_time, box_start_time, user_name
+        from golf_box_history
+       where yyyymmdd = #{yyyymmdd}
+         and user_dong = #{userDong}
+         and user_ho = #{userHo}
+         and user_name = #{userName}
+    </select>
+
+    <select id="getOne" resultType="com.golf.biz.boxHistory.entity.GolfBoxHistory">
+        select id, yyyymmdd, user_dong, user_ho, box_id, box_end_time, box_start_time, user_name
+        from golf_box_history
+        where yyyymmdd = #{yyyymmdd}
+          and user_dong = #{userDong}
+          and user_ho = #{userHo}
+          and user_name = #{userName}
+        limit 1
+    </select>
+
+    <update id="update">
+        update golf_box
+        set use_yn = #{useYn}
+          ,user_name = #{userName}
+          ,user_dong = #{userDong}
+          ,user_ho = #{userHo}
+          ,start_time = #{startTime}
+          ,end_time = #{endTime}
+        where id = #{id}
+    </update>
+
+</mapper>
