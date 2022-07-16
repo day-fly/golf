@@ -1,3 +1,4 @@
+
 spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -15,6 +16,7 @@ spring:
         dialect:
           storage-engine: innodb
   datasource:
+    jdbc-url: ${SPRING_DATASOURCE_BASE_URL:jdbc:mysql://druwa-mysql.cgmel9mrx7of.us-east-1.rds.amazonaws.com:3306}/druwa?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
     url: ${SPRING_DATASOURCE_BASE_URL:jdbc:mysql://druwa-mysql.cgmel9mrx7of.us-east-1.rds.amazonaws.com:3306}/druwa?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false
     username: ${SPRING_DATASOURCE_BASE_USERNAME:admin}
     password: ${SPRING_DATASOURCE_BASE_PASSWORD:druwa0070}
@@ -31,3 +33,7 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
     display-query-params-without-oauth2: true
+
+logging:
+  level:
+    root: info

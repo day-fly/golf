@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golf.box.mapper.GolfBoxMapper">
+
+    <select id="getList" resultType="com.golf.box.entity.GolfBox">
+        select golf_box_id
+             ,golf_box_name
+             ,golf_box_use_yn
+             ,box_user_id
+             ,box_start_time
+             ,box_end_time
+        from golf_box
+    </select>
+
+</mapper>

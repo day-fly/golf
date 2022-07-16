@@ -18,6 +18,7 @@ spring:
         show_sql: true
         format_sql: true
   datasource:
+    jdbc-url: ${SPRING_DATASOURCE_BASE_URL:jdbc:mysql://localhost:3306/sample?serverTimezone=UTC&useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false}
     url: ${SPRING_DATASOURCE_BASE_URL:jdbc:mysql://localhost:3306/sample?serverTimezone=UTC&useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&useSSL=false}
     username: ${SPRING_DATASOURCE_BASE_USERNAME:root}
     password: ${SPRING_DATASOURCE_BASE_PASSWORD:1q2w3e4r}

@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="text-h4 text-purple text-bold">
+    <div class="text-h3 text-white text-bold">
       안녕하세요. 생채인증을 해주세요.
       <q-linear-progress indeterminate color="warning"></q-linear-progress>
     </div>

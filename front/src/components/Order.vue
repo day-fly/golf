@@ -1,103 +1,101 @@
 ﻿<template>
-  <q-layout view="hHh lpR fFf">
-    <q-header class="bg-brown-7 text-white text-h4 text-bold row items-center justify-center" style="min-height:100px">
-      &nbsp;&nbsp;{{ userDong ? userDong.replace(/.$/,"*") : ''}}동 {{ userHo ? userHo.replace(/.$/,"*") : '' }}호 {{ userName ? userName.replace(/.$/,"*") : '' }}님 환영합니다.
-      [{{20-delayTime}} 초]
-    </q-header>
+    <q-layout view="hHh lpR fFf">
+      <q-header class="bg-black text-white text-h4 text-bold row items-center justify-center" style="min-height:100px">
+        &nbsp;&nbsp;{{ userDong ? userDong.replace(/.$/,"*") : ''}}동 {{ userHo ? userHo.replace(/.$/,"*") : '' }}호 {{ userName ? userName.replace(/.$/,"*") : '' }}님 환영합니다.
+        [{{20-delayTime}} 초]
+      </q-header>
 
-    <q-drawer behavior="desktop"
-              :show-if-above="true" side="right" bordered :width="400">
-      <!-- drawer content -->
-      <div class="q-pa-md" style="max-width: 400px">
-        <div align="center">
-          <q-btn class="glossy text-h4 text-weight-bold" rounded color="deep-orange" label="주문"
-                 style="height: 50px;min-width: 150px" @click="confirmOrder"></q-btn>&nbsp;&nbsp;
-          <q-btn class="glossy text-h4 text-weight-bold" rounded color="grey" label="취소"
-                 style="height: 50px;min-width: 150px" @click="cancelOrder"></q-btn>
-        </div>
-        <br>
-        <q-toolbar class="bg-brown text-white shadow-2 glossy">
+      <q-page-container>
+        <div class="row">
+          <div class="fixed-center text-h5">
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석9" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석14" @click="confirmOrder"></q-btn>
 
-          <q-toolbar-title>
-            주문목록
-          </q-toolbar-title>
-        </q-toolbar>
+            <br/><br/>
 
-        <q-list bordered>
-          <q-item v-for="order in orders" :key="order.id" class="q-my-sm" clickable v-ripple>
-            <q-item-section avatar>
-              <q-btn color="black" text-color="white" push label="X" style="font-size: 1.2em"
-                     @click="deleteOrder(order)"></q-btn>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label style="font-size: 1.2em">{{ order.menuName }}</q-item-label>
-              <q-item-label style="font-size: 1.2em" caption lines="1">주문수량 : <b class="text-accent">{{ order.qty }}</b>
-              </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-btn-group push>
-                <q-btn color="white" text-color="black" push label="+" style="font-size: 1.5em"
-                       @click="addQty(order)"></q-btn>
-                <q-btn color="grey-4" text-color="black" push label="-" style="font-size: 1.5em"
-                       @click="minusQty(order)"></q-btn>
-                <!--                <q-btn color="red" text-color="white" push label="X" style="font-size: 1.2em" @click="minusQty(order)"></q-btn>-->
-              </q-btn-group>
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석8" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석13" @click="confirmOrder"></q-btn>
 
-            </q-item-section>
-          </q-item>
-          <q-separator></q-separator>
-        </q-list>
-        <div v-if="orders.length > 0" class="row justify-end text-h5 text-bold">₩ {{ totalPrice }}원</div>
-      </div>
-    </q-drawer>
+            <br/><br/>
 
-    <q-page-container>
-      <q-tabs
-          v-model="tab"
-          indicator-color="black"
-          class="bg-purple-9 text-white shadow-2"
-          dense
-          align="justify"
-      >
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석7" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석12" @click="confirmOrder"></q-btn>
 
-        <template v-for="(menu,index) in menu1Levels.slice(0,4)" :key="menu.id">
-          <q-tab class="text-bold text-h6" :name="menu.menuName" :label="menu.menuName"
-                 :style="`background-color:${colorRgbList[index]}`" style="min-height: 100px;" @click="delayTime = 0"></q-tab>
-        </template>
-      </q-tabs>
+            <br/><br/>
 
-      <q-tabs
-          v-model="tab"
-          indicator-color="black"
-          class="bg-purple-9 text-white shadow-2"
-          dense
-          align="justify"
-      >
-        <template v-for="(menu,index) in menu1Levels.slice(4,8)" :key="menu.id">
-          <q-tab class="text-bold text-h6" :name="menu.menuName" :label="menu.menuName"
-                 :style="`background-color:${colorRgbList[index+4]}`" style="min-height: 100px;" @click="delayTime = 0"></q-tab>
-        </template>
-      </q-tabs>
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석6" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석11" @click="confirmOrder"></q-btn>
 
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel v-for="menu in menu1Levels" :name="menu.menuName" :key="menu.id">
-          <q-toolbar class="bg-brown text-white">
-            <q-toolbar-title clas="text-h6 text-bold">{{ menu.menuName }}</q-toolbar-title>
-          </q-toolbar>
-          <div class="q-pa-md row items-start q-gutter-md">
-            <q-card v-for="subMenu in menu2Levels.filter((obj) => obj.parentId === menu.id)" :key="subMenu.id"
-                    class="my-card" @click="selectMenu(subMenu)">
-              <q-img src="../images/coffee.jpg"/>
-              <q-card-section class="text-center">
-                <b class="text-accent" style="font-size: 1.4em;">{{ subMenu.menuCost }}원</b>
-                <div style="font-size: 1.5vw;" v-html="subMenu.menuName"></div>
-              </q-card-section>
-            </q-card>
+            <br/><br/>
+
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석5" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석10" @click="confirmOrder"></q-btn>
+
+            <br/><br/>
+
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석4" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold" color="grey" label="x"></q-btn>
+
+            <br/><br/>
+
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석3" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold" color="grey" label="x"></q-btn>
+
+            <br/><br/>
+
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석2" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold" color="grey" label="x"></q-btn>
+
+            <br/><br/>
+
+            <q-btn style="width:200px;" class="text-h4 text-bold text-green" color="white" label="타석1" @click="confirmOrder"></q-btn>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <q-btn style="width:200px;" class="text-h4 text-bold" color="grey" label="x"></q-btn>
+
           </div>
-        </q-tab-panel>
-      </q-tab-panels>
-    </q-page-container>
-  </q-layout>
+        </div>
+      </q-page-container>
+
+      <q-footer elevated class="bg-black text-white text-h4 text-bold row items-center justify-center" style="min-height:100px">
+        원하시는 타석을 선택해주세요.
+      </q-footer>
+
+    </q-layout>
 
   <q-dialog v-model="showConfirmOrders">
     <q-card>
@@ -184,7 +182,7 @@ export default {
     interval = setInterval(() => {
       this.delayTime += 1
       if(this.delayTime > 19){
-        this.cancelOrder()
+        //this.cancelOrder()
       }
     }, 1000)
 
@@ -337,6 +335,13 @@ export default {
   height: 40px;
   font-size: 45px;
 }
+
+.bg-image {
+  background-image: url(https://cdn.quasar.dev/img/mountains.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 
 .my-card {
   width: 100%;
