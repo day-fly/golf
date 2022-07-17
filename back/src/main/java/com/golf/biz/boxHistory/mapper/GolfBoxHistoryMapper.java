@@ -12,5 +12,5 @@ import java.util.ArrayList;
 public interface GolfBoxHistoryMapper {
     ArrayList<GolfBoxHistory> getList(GolfBoxHistoryRequest golfBoxHistoryRequest);
     GolfBoxHistory getOne(GolfBoxHistoryRequest golfBoxHistoryRequest);
-    void update(GolfBoxHistory golfBoxHistory);
+    void insert(GolfBoxHistory golfBoxHistory);
 }

@@ -15,8 +15,8 @@
                 &nbsp;
                 &nbsp;
               </template>
-              <q-btn style="width:200px;"
-                     class="text-h4 text-bold text-green-7"
+              <q-btn style="width:180px;"
+                     class="text-h5 text-bold text-green-7"
                      :disabled = "n.id == 'x' || n.useYn == 'Y' ? true : false"
                      :color="n.id == 'x'  || n.useYn == 'Y' ? 'grey' : 'white'"
                      :label="'타석'+n.name"

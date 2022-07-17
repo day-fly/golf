@@ -11,4 +11,5 @@ import java.util.ArrayList;
 public interface GolfWaitUserMapper {
     ArrayList<GolfWaitUser> getList();
     void insert(GolfWaitUser golfWaitUser);
+    void cancel(GolfWaitUser golfWaitUser);
 }

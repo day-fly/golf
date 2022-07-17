@@ -12,4 +12,12 @@
         values (#{userName}, #{userDong}, #{userHo}, #{waitTime})
     </update>
 
+    <delete id="cancel">
+        delete
+          from golf_wait_user
+         where user_name = #{userName}
+           and user_dong = #{userDong}
+           and user_ho = #{userHo}
+    </delete>
+
 </mapper>

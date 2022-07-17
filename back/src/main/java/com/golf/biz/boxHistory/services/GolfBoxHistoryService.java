@@ -26,7 +26,7 @@ public class GolfBoxHistoryService {
     }
 
     public void insert(GolfBoxHistory golfBoxHistory) {
-        golfBoxHistoryMapper.update(golfBoxHistory);
+        golfBoxHistoryMapper.insert(golfBoxHistory);
     }
 
 }

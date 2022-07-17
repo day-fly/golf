@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center" style="background-color:rgba(0, 0, 0, 0.6);">
-    <div class="text-h3 text-white text-bold">
+    <div class="text-h4 text-white text-bold">
       안녕하세요. 생채인증을 해주세요.
       <q-linear-progress indeterminate color="warning"></q-linear-progress>
     </div>
@@ -71,30 +71,34 @@ export default {
                 "userHo": this.userHo,
               }
           )
-          .then(response => {
+          .then(async response => {
             const data = response.data
             console.log(data)
 
-            // {
-            //   "fullBox": false,
-            //     "firstBooking": true,
-            //     "usingUser": false,
-            //     "watingUser": false
+            //현재 이용중인 유저일 경우
+            // if(data.usingUser){
+            //
             // }
-
+            //현재 대기열에 들어가있는 유저일 경우
+            if (data.waitingUser) {
+              await this.forwardPage('cancelWaiting')
+              return
+            }
             //최초예약 + 타석이 비어있는 경우
-            if(data.firstBooking && !data.fullBox){
-              this.forwardPage('booking')
-            //최초예약 + 타석이 꽉 찬 경우
-            }else if(data.firstBooking && data.fullBox){
-              this.forwardPage('alertFullBox')
+            if (data.firstBooking && !data.fullBox) {
+              await this.forwardPage('booking')
+              return
+              //최초예약 + 타석이 꽉 찬 경우
+            } else if (data.firstBooking && data.fullBox) {
+              await this.forwardPage('alertFullBox')
+              return
             }
           })
           .catch(() => {
             this.$router.push('error')
           })
     },
-    forwardPage(pageName){
+    async forwardPage(pageName){
       this.$router.push({
         name: pageName, params: {
           userDong: this.userDong,

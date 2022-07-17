@@ -27,4 +27,7 @@ public class GolfWaitUserService {
         golfWaitUserMapper.insert(golfWaitUser);
     }
 
+    public void cancel(GolfWaitUser golfWaitUser) {
+        golfWaitUserMapper.cancel(golfWaitUser);
+    }
 }

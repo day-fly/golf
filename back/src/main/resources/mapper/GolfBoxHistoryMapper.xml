@@ -21,7 +21,8 @@
         limit 1
     </select>
 
-    <update id="update">
+    <insert id="insert">
+        insert into golf_box_history
         update golf_box
         set use_yn = #{useYn}
           ,user_name = #{userName}
@@ -30,6 +31,6 @@
           ,start_time = #{startTime}
           ,end_time = #{endTime}
         where id = #{id}
-    </update>
+    </insert>
 
 </mapper>

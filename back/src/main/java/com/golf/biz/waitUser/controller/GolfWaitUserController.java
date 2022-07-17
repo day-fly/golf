@@ -35,6 +35,12 @@ public class GolfWaitUserController {
         golfWaitUserService.insert(golfWaitUser);
     }
 
+    @PostMapping("/cancel")
+    @Operation(summary = "대기열 insert")
+    public void cancel(@RequestBody GolfWaitUser golfWaitUser) {
+        golfWaitUserService.cancel(golfWaitUser);
+    }
+
     private GolfWaitUserResponse convertToDto(GolfWaitUser golfWaitUser) {
         GolfWaitUserResponse golfWaitUserResponse = modelMapper.map(golfWaitUser, GolfWaitUserResponse.class);
         return golfWaitUserResponse;

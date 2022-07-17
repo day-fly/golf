@@ -41,6 +41,16 @@ public class GolfBoxService {
         golfBoxMapper.update(golfBox);
     }
 
+    public void end(GolfBoxRequest golfBoxRequest){
+        GolfBox golfBox = modelMapper.map(golfBoxRequest, GolfBox.class);
+        golfBox.setUserDong(null);
+        golfBox.setUserHo(null);
+        golfBox.setUserName(null);
+        golfBox.setStartTime(null);
+        golfBox.setEndTime(null);
+        golfBoxMapper.update(golfBox);
+    }
+
     public UserStatusResponse getStatus(GolfBoxRequest golfBoxRequest) {
         // 현재 날짜 구하기
         LocalDate now = LocalDate.now();
@@ -73,7 +83,7 @@ public class GolfBoxService {
         );
 
         //내가 대기예약을 걸었는지
-        boolean isWatingUser = golfWaitUserService.getList().stream().anyMatch(v ->
+        boolean isWaitingUser = golfWaitUserService.getList().stream().anyMatch(v ->
                         golfBoxRequest.getUserDong().equals(v.getUserDong())
                                 && golfBoxRequest.getUserHo().equals(v.getUserHo())
                                 && golfBoxRequest.getUserName().equals(v.getUserName())
@@ -83,7 +93,7 @@ public class GolfBoxService {
                 .isFirstBooking(isFirstBooking)
                 .isFullBox(isFullBox)
                 .isUsingUser(isUsingUser)
-                .isWatingUser(isWatingUser)
+                .isWaitingUser(isWaitingUser)
                 .build();
     }
 }
