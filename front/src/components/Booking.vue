@@ -17,8 +17,8 @@
               </template>
               <q-btn style="width:180px;"
                      class="text-h5 text-bold text-green-7"
-                     :disabled = "n.id == 'x' || n.useYn == 'Y' ? true : false"
-                     :color="n.id == 'x'  || n.useYn == 'Y' ? 'grey' : 'white'"
+                     :disabled = "n.id == 'x' || n.useYn == 'Y' || n.id == usingUserBoxId ? true : false"
+                     :color="n.id == 'x'  || n.useYn == 'Y' || n.id == usingUserBoxId ? 'grey' : 'white'"
                      :label="'타석'+n.name"
                      @click="booking(n.id, n.name)"></q-btn>
               <template v-if="index % 2 == 1">
@@ -39,11 +39,20 @@
   <q-dialog v-model="showAlert">
     <q-card>
       <q-card-section class="bg-green-9 text-white">
-        <div class="text-h6 text-bold">{{selectedBoxName}}번 타석을 예약진행 하시겠습니까?</div>
+        <div v-if="this.usingUserBoxId && this.usingUserBoxId.length > 0" class="text-h6 text-bold">
+          타석을 이동하시겠습니까?
+        </div>
+        <div v-else class="text-h6 text-bold">
+          <template v-if="firstBooking == 'false'">
+            오늘 이용이력이 있으므로 30분 예약만 가능합니다.<br>
+          </template>
+          {{selectedBoxName}}번 타석을 예약진행 하시겠습니까?
+        </div>
       </q-card-section>
 
       <q-card-actions align="center">
         <q-btn style="width:150px" class="text-h6 text-bold" label="확인" color="black" @click="completeBooking" v-close-popup></q-btn>
+        <q-btn style="width:150px" class="text-h6 text-bold" label="취소" color="black" v-close-popup></q-btn>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -60,16 +69,15 @@ export default {
   props: {
     userDong: String,
     userHo: String,
-    userName: String
+    userName: String,
+    firstBooking: {type:String, default: 'true'},
+    usingUserBoxId: String,
   },
   data() {
     return {
       delayTime: 0,
       $q: useQuasar(),
       showAlert: false,
-      orders: [],
-      orderSeq: 0,
-      totalPrice: 0,
       selectedBoxId: '',
       selectedBoxName: '',
       boxInfos: [
@@ -91,17 +99,6 @@ export default {
         {id: 'x', name: 'x'},
         {id: 'golf_1', name: '1'},
         {id: 'x', name: 'x'},
-      ],
-      colorRgbList: [
-        'rgb(215, 128, 18)',
-        'rgb(166, 12, 34)',
-        'rgb(63, 8, 24)',
-        'rgb(250, 207, 20)',
-
-        'rgb(93, 190, 165)',
-        'rgb(242, 157, 17)',
-        'rgb(191, 21, 111)',
-        'rgb(132, 48, 142)'
       ]
     }
   },
@@ -159,6 +156,10 @@ export default {
       })
     },
     booking(id, name) {
+      // console.log(typeof this.firstBooking)
+      // console.log(this.firstBooking)
+      // console.log(typeof new Boolean(this.firstBooking))
+      // console.log(new Boolean(this.firstBooking))
 
       //테스트 이후 주석해제
       if(!this.userName){
@@ -170,16 +171,21 @@ export default {
       this.selectedBoxId = id
       this.selectedBoxName = name
       this.showAlert = true
-
     },
     completeBooking(){
+      console.log(this.usingUserBoxId.length)
+      if(this.usingUserBoxId && this.usingUserBoxId.length > 0){
+        this.move()
+      }else{
+        this.start()
+      }
+    },
+    move(){
       axios.post(
-          `http://${this.$static.SERVER_IP}/java/box/start`,
+          `http://${this.$static.SERVER_IP}/java/box/move`,
           {
-            "id": this.selectedBoxId,
-            "userName": this.userName,
-            "userDong": this.userDong,
-            "userHo": this.userHo
+            "id": this.usingUserBoxId,
+            "moveId" : this.selectedBoxId
           }
       ).then(async () => {
         clearInterval(interval)
@@ -190,6 +196,25 @@ export default {
         this.$router.push('/error')
       })
     },
+    start(){
+      axios.post(
+          `http://${this.$static.SERVER_IP}/java/box/start`,
+          {
+            "id": this.selectedBoxId,
+            "userName": this.userName,
+            "userDong": this.userDong,
+            "userHo": this.userHo,
+            "firstBooking": this.firstBooking
+          }
+      ).then(async () => {
+        clearInterval(interval)
+        this.$q.loading.hide()
+        await this.$router.push({name: 'bye', params: {text: '예약이 완료되었습니다. 감사합니다.'}})
+      }).catch(() => {
+        this.$q.loading.hide()
+        this.$router.push('/error')
+      })
+    }
   },
   setup() {
     return {

@@ -25,4 +25,12 @@ document.addEventListener(
   //background-repeat: no-repeat;
   background-size: cover
 }
+
+div {
+  -ms-user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
 </style>

@@ -6,6 +6,7 @@ import com.golf.biz.boxHistory.model.GolfBoxHistoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,6 +27,13 @@ public class GolfBoxHistoryService {
     }
 
     public void insert(GolfBoxHistory golfBoxHistory) {
+        if(golfBoxHistory == null) return;
+
+        LocalDate nowDate = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String yyyymmdd = nowDate.format(dateFormatter);
+
+        golfBoxHistory.setYyyymmdd(yyyymmdd);
         golfBoxHistoryMapper.insert(golfBoxHistory);
     }
 

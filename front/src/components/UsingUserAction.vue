@@ -79,6 +79,17 @@ export default {
       })
 
     },
+    async moveBox() {
+      this.$router.push({
+        name: 'booking', params: {
+          userDong: this.userDong,
+          userHo: this.userHo,
+          userName: this.userName,
+          usingUserBoxId: this.usingUserBoxId
+        }
+      })
+    },
+
     async end() {
       this.$q.loading.show()
       axios.post(

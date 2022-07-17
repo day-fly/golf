@@ -94,9 +94,12 @@ export default {
               await this.forwardPage('alertFullBox')
               return
             } else if (!data.firstBooking){
-              // if(data.fullBox){
-              //
-              // }
+              if(data.fullBox || data.isExistWaitingUser){
+                await this.$router.push({name: 'bye', params: {text: '오늘 이용이력이 있으므로 대기자가 있거나 타석이 꽉 찬 경우 예약이 불가합니다.'}})
+              }else{
+                //console.log(typeof data.firstBooking)
+                await this.forwardPage('booking',data)
+              }
             }
           })
           .catch(() => {

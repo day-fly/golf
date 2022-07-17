@@ -15,4 +15,5 @@ public class GolfBoxRequest {
     private String userHo;
 
     private String moveId;
+    private boolean firstBooking;
 }

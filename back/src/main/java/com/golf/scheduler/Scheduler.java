@@ -30,13 +30,8 @@ public class Scheduler {
         }
         LocalTime nowTime = LocalTime.now();         // 현재시간 출력
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmm");
-        LocalDate nowDate = LocalDate.now();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String yyyymmdd = nowDate.format(dateFormatter);
 
-        //golfWaitUser.setWaitTime(now.format(formatter));
-
-        boxList.stream().forEach(v -> {
+        boxList.forEach(v -> {
             if("Y".equals(v.getUseYn())
                     && v.getEndTime() != null
                     && nowTime.isAfter(LocalTime.parse(v.getEndTime(), timeFormatter))){
@@ -48,7 +43,6 @@ public class Scheduler {
                                 .boxId(v.getId())
                                 .boxStartTime(v.getStartTime())
                                 .boxEndTime(v.getEndTime())
-                                .yyyymmdd(yyyymmdd)
                                 .build()
                 );
 

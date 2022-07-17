@@ -36,16 +36,44 @@ public class GolfBoxService {
     public void start(GolfBoxRequest golfBoxRequest) {
         LocalTime now = LocalTime.now();         // 현재시간 출력
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+
+        //TODO: 65,30을 DB값으로 바꿔야함
+        long plusMinutes = 65;
+        if(!golfBoxRequest.isFirstBooking()){
+           plusMinutes = 30;
+        }
+
         GolfBox golfBox = modelMapper.map(golfBoxRequest, GolfBox.class);
         golfBox.setUseYn("Y");
         golfBox.setStartTime(now.format(formatter));
-        //TODO: 65를 DB값으로 바꿔야함
-        golfBox.setEndTime(now.plusMinutes(65).format(formatter));
+        golfBox.setEndTime(now.plusMinutes(plusMinutes).format(formatter));
         golfBoxMapper.update(golfBox);
     }
 
     public void end(GolfBoxRequest golfBoxRequest){
+
+        GolfBox box = golfBoxMapper.getOneById(golfBoxRequest);
+        LocalTime nowTime = LocalTime.now();         // 현재시간 출력
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmm");
+
+        //insert History
+        golfBoxHistoryService.insert(
+                GolfBoxHistory.builder()
+                        .userName(box.getUserName())
+                        .userDong(box.getUserDong())
+                        .userHo(box.getUserHo())
+                        .boxId(box.getId())
+                        .boxStartTime(box.getStartTime())
+                        .boxEndTime(nowTime.format(timeFormatter))
+                        .build()
+        );
+
+        //update golf box
         GolfBox golfBox = modelMapper.map(golfBoxRequest, GolfBox.class);
+        end(golfBox);
+    }
+
+    private void end(GolfBox golfBox){
         golfBox.setUserDong(null);
         golfBox.setUserHo(null);
         golfBox.setUserName(null);
@@ -121,6 +149,23 @@ public class GolfBoxService {
     }
 
     public void move(GolfBoxRequest golfBoxRequest) {
+        //이동하는 타석에 원래 타석 정보 update
+        GolfBox box = golfBoxMapper.getOneById(golfBoxRequest);
+        golfBoxMapper.update(
+                GolfBox.builder()
+                        .id(golfBoxRequest.getMoveId())
+                        .userName(box.getUserName())
+                        .userDong(box.getUserDong())
+                        .userHo(box.getUserHo())
+                        .startTime(box.getStartTime())
+                        .endTime(box.getEndTime())
+                        .useYn(box.getUseYn())
+                        .build()
+        );
+        //원래 타석은 초기화
+        end(GolfBox.builder()
+                .id(golfBoxRequest.getId())
+                .build());
     }
 
     //남은시간 10분이내, 대기자가 없는경우 연장 가능
