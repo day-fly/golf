@@ -10,6 +10,6 @@
 .bg-image {
   background-image: url("./images/background.jpg");
   //background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover
 }
 </style>

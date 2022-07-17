@@ -108,14 +108,14 @@ export default {
   created() {
     clearInterval(interval)
 
-    // if(!this.userName){
-    //   this.$router.push('/')
-    // }
+    if(!this.userName){
+      this.$router.push('/')
+    }
 
     interval = setInterval(() => {
       this.delayTime += 1
       if(this.delayTime > 19){
-        //this.cancelOrder()
+        //this.cancel()
       }
     }, 1000)
 
@@ -146,7 +146,7 @@ export default {
             this.$q.loading.hide()
           })
     },
-    cancelOrder(){
+    cancel(){
       axios.post(
           `http://${this.$static.SERVER_IP}/java/order/cancel`
       ).then(async () => {
@@ -161,10 +161,10 @@ export default {
     booking(id, name) {
 
       //테스트 이후 주석해제
-      // if(!this.userName){
-      //   this.$router.push('/')
-      //   return
-      // }
+      if(!this.userName){
+        this.$router.push('/')
+        return
+      }
 
       this.delayTime = 0
       this.selectedBoxId = id
@@ -184,54 +184,12 @@ export default {
       ).then(async () => {
         clearInterval(interval)
         this.$q.loading.hide()
-        await this.$router.push({name: 'bye', params: {orderSeq: this.orderSeq}})
+        await this.$router.push({name: 'bye', params: {text: '예약이 완료되었습니다. 감사합니다.'}})
       }).catch(() => {
         this.$q.loading.hide()
         this.$router.push('/error')
       })
     },
-    completeOrders() {
-      this.delayTime = 0
-      if(!this.userName){
-        this.$router.push('/')
-        return
-      }
-
-      let orderProducts = []
-      this.orders.forEach((obj) => {
-        orderProducts.push({
-          "orderMenuId": obj.id,
-          "orderMenuName": obj.menuName,
-          "orderMenuCost": obj.menuCost,
-          "orderMenuCount": obj.qty,
-        })
-      })
-
-      this.$q.loading.show()
-      axios.post(
-              `http://${this.$static.SERVER_IP}/java/order/`,
-          {
-            "orderName": this.userName,
-            "orderDong": this.userDong,
-            "orderHo": this.userHo,
-            "orderProducts": orderProducts
-          }
-      ).then(async () => {
-        clearInterval(interval)
-        this.$q.loading.hide()
-        await this.$router.push({name: 'bye', params: {orderSeq: this.orderSeq}})
-      }).catch(() => {
-        this.$q.loading.hide()
-        this.$router.push('/error')
-      })
-    },
-    calTotalPrice() {
-      //const target = Object.assign({}, this.orders)
-      const result = this.orders.reduce(function (acc, obj) {
-        return acc + (obj.menuCost * obj.qty)
-      }, 0)
-      this.totalPrice = result
-    }
   },
   setup() {
     return {

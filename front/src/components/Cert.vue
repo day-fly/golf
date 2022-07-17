@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center" style="background-color:rgba(0, 0, 0, 0.6);">
     <div class="text-h3 text-white text-bold">
       안녕하세요. 생채인증을 해주세요.
       <q-linear-progress indeterminate color="warning"></q-linear-progress>
@@ -84,18 +84,19 @@ export default {
 
             //최초예약 + 타석이 비어있는 경우
             if(data.firstBooking && !data.fullBox){
-              this.moveBooking()
+              this.forwardPage('booking')
+            //최초예약 + 타석이 꽉 찬 경우
             }else if(data.firstBooking && data.fullBox){
-
+              this.forwardPage('alertFullBox')
             }
           })
           .catch(() => {
             this.$router.push('error')
           })
     },
-    moveBooking(){
+    forwardPage(pageName){
       this.$router.push({
-        name: 'order', params: {
+        name: pageName, params: {
           userDong: this.userDong,
           userHo: this.userHo,
           userName: this.userName
