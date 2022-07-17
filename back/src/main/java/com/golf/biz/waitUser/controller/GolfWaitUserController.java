@@ -21,8 +21,8 @@ public class GolfWaitUserController {
     final private ModelMapper modelMapper;
 
     @GetMapping("/list")
-    @Operation(summary = "골프 타석 리스트", description = "모든 골프 타석 리스트 정보를 반환한다.")
-    public List<GolfWaitUserResponse> getDemoList() {
+    @Operation(summary = "골프 대기열 리스트")
+    public List<GolfWaitUserResponse> getList() {
         ArrayList<GolfWaitUser> list = golfWaitUserService.getList();
         return list.stream()
                 .map(this::convertToDto)

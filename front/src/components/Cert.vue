@@ -17,12 +17,16 @@ import axios from "axios";
 export default {
   name: 'HelloWorld',
   data() {
-    return {}
+    return {
+      userName: '',
+      userDong: '',
+      userHo: ''
+    }
   },
   mounted() {
     count = 0
     axios.post(
-        `http://${this.$static.SERVER_IP}/order/cancel`
+        `http://${this.$static.SERVER_IP}/java/order/cancel`
     ).then(() => {
       clearInterval(interval)
       interval = setInterval(() => this.checkUser(), 2000)
@@ -41,46 +45,62 @@ export default {
         this.$router.push('/')
       }
       axios
-          .get(`http://${this.$static.SERVER_IP}/user/`)
+          .get(`http://${this.$static.SERVER_IP}/java/user/`)
           .then(response => {
             const data = response.data
             if (data.userDongHo !== null) {
               clearInterval(interval)
 
-              this.$router.push({
-                name: 'order', params: {
-                  userDong: data.userDongHo.split('-')[0],
-                  userHo: data.userDongHo.split('-')[1],
-                  userName: data.userName
-                }
-              })
+              this.userDong = data.userDongHo.split('-')[0]
+              this.userHo = data.userDongHo.split('-')[1]
+              this.userName = data.userName
+
+              this.checkUserStatus()
             }
           })
           .catch(() => {
             this.$router.push('error')
           })
     },
-    checkUserStatus() {
+    async checkUserStatus() {
       axios
-          .get(`http://${this.$static.SERVER_IP}/user/`)
+          .post(`http://${this.$static.SERVER_IP}/java/box/status`,
+              {
+                "userName": this.userName,
+                "userDong": this.userDong,
+                "userHo": this.userHo,
+              }
+          )
           .then(response => {
             const data = response.data
-            if (data.userDongHo !== null) {
-              clearInterval(interval)
+            console.log(data)
 
-              this.$router.push({
-                name: 'order', params: {
-                  userDong: data.userDongHo.split('-')[0],
-                  userHo: data.userDongHo.split('-')[1],
-                  userName: data.userName
-                }
-              })
+            // {
+            //   "fullBox": false,
+            //     "firstBooking": true,
+            //     "usingUser": false,
+            //     "watingUser": false
+            // }
+
+            //최초예약 + 타석이 비어있는 경우
+            if(data.firstBooking && !data.fullBox){
+              this.moveBooking()
+            }else if(data.firstBooking && data.fullBox){
+
             }
           })
           .catch(() => {
             this.$router.push('error')
           })
-
+    },
+    moveBooking(){
+      this.$router.push({
+        name: 'order', params: {
+          userDong: this.userDong,
+          userHo: this.userHo,
+          userName: this.userName
+        }
+      })
     }
   }
 }

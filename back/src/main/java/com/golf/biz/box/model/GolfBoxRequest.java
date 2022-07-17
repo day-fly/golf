@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GolfBoxRequest {
+    private String id;
     private String yyyymmdd;
     private String userName;
     private String userDong;

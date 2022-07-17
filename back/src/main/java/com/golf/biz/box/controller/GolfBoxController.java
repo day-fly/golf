@@ -31,7 +31,7 @@ public class GolfBoxController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/status")
+    @PostMapping("/status")
     @Operation(summary = "상태 조회", description = "상태조회")
     public UserStatusResponse getStatus(@RequestBody GolfBoxRequest golfBoxRequest) {
         return golfBoxService.getStatus(golfBoxRequest);
@@ -39,8 +39,8 @@ public class GolfBoxController {
 
     @PostMapping("/start")
     @Operation(summary = "골프 타석 시작")
-    public void update(@RequestBody GolfBox golfBox) {
-        golfBoxService.start(golfBox);
+    public void update(@RequestBody GolfBoxRequest golfBoxRequest) {
+        golfBoxService.start(golfBoxRequest);
     }
 
     private GolfBoxResponse convertToDto(GolfBox golfBox) {

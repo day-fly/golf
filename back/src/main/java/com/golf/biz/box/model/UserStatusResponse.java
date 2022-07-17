@@ -8,7 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserStatusResponse {
-    //최초예약여부 (y,n), 타석 꽉찼는지 정보(y,n), 내가 현재 사용중인지(y,n), 대기예약을 걸었는지 여부(y,n)
-    private boolean isFirstBooking;
-
+    private boolean isFirstBooking; // 오늘 최초예약인지 체크
+    private boolean isFullBox; // 비어있는 타석이 있는지 체크
+    private boolean isUsingUser; //현재 사용중인 USER 인지 체크
+    private boolean isWatingUser; //현재 대기중인 USER 인지 체크
 }
