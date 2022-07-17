@@ -44,9 +44,27 @@ public class GolfBoxController {
     }
 
     @PostMapping("/end")
-    @Operation(summary = "골프 종료")
+    @Operation(summary = "골프 타석 종료")
     public void end(@RequestBody GolfBoxRequest golfBoxRequest) {
         golfBoxService.end(golfBoxRequest);
+    }
+
+    @PostMapping("/isExtend")
+    @Operation(summary = "골프 타석 연장가능 여부")
+    public boolean isExtend(@RequestBody GolfBoxRequest golfBoxRequest) {
+        return golfBoxService.isExtend(golfBoxRequest);
+    }
+
+    @PostMapping("/extend")
+    @Operation(summary = "골프 타석 연장")
+    public void extend(@RequestBody GolfBoxRequest golfBoxRequest) {
+        golfBoxService.extend(golfBoxRequest);
+    }
+
+    @PostMapping("/move")
+    @Operation(summary = "골프 타석 이동")
+    public void move(@RequestBody GolfBoxRequest golfBoxRequest) {
+        golfBoxService.move(golfBoxRequest);
     }
 
     private GolfBoxResponse convertToDto(GolfBox golfBox) {

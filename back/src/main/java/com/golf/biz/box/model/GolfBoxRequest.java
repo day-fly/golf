@@ -13,4 +13,6 @@ public class GolfBoxRequest {
     private String userName;
     private String userDong;
     private String userHo;
+
+    private String moveId;
 }

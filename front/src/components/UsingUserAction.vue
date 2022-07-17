@@ -7,13 +7,15 @@
 
     <q-page class="flex flex-center">
       <div class="text-h4 text-white text-center text-bold">
-        <q-btn style="width:180px" class="text-h4 text-bold" label="운동종료" color="green-8" @click="finish"></q-btn>
+        <q-btn style="width:170px" class="text-h4 text-bold" label="운동종료" color="green-8" @click="end"></q-btn>
         &nbsp;
-        &nbsp;
-        <q-btn style="width:150px" class="text-h4 text-bold" label="타석연장" color="green-8" @click="extendTime"></q-btn>
-        &nbsp;
-        &nbsp;
-        <q-btn style="width:150px" class="text-h4 text-bold" label="타석이동" color="green-8" @click="moveBox"></q-btn>
+        <template v-if="showExtendBtn">
+          <q-btn style="width:170px" class="text-h4 text-bold" label="타석연장" color="green-8" @click="extendTime"></q-btn>
+          &nbsp;
+        </template>
+        <q-btn style="width:170px" class="text-h4 text-bold" label="타석이동" color="green-8" @click="moveBox"></q-btn>
+          &nbsp;
+        <q-btn style="width:170px" class="text-h4 text-bold" label="취소" color="orange-8" @click="cancel"></q-btn>
       </div>
     </q-page>
   </q-layout>
@@ -31,11 +33,13 @@ export default {
   props: {
     userDong: String,
     userHo: String,
-    userName: String
+    userName: String,
+    usingUserBoxId: String,
   },
   data() {
     return {
       delayTime: 0,
+      showExtendBtn: false
     }
   },
   created() {
@@ -52,22 +56,40 @@ export default {
       }
     }, 1000)
 
+    this.isExtend()
 
   },
   methods: {
-    async book() {
+    async isExtend(){
       this.$q.loading.show()
       axios.post(
-          `http://${this.$static.SERVER_IP}/java/waitUser/cancel`,
+          `http://${this.$static.SERVER_IP}/java/box/isExtend`,
           {
             "userName": this.userName,
             "userDong": this.userDong,
             "userHo": this.userHo
           }
+      ).then(async (response) => {
+        clearInterval(interval)
+        this.$q.loading.hide()
+        this.showExtendBtn = response.data
+      }).catch(() => {
+        this.$q.loading.hide()
+        this.$router.push('/error')
+      })
+
+    },
+    async end() {
+      this.$q.loading.show()
+      axios.post(
+          `http://${this.$static.SERVER_IP}/java/box/end`,
+          {
+            "id": this.usingUserBoxId
+          }
       ).then(async () => {
         clearInterval(interval)
         this.$q.loading.hide()
-        await this.$router.push({name: 'bye', params: {text: '대기예약이 취소되었습니다.'}})
+        await this.$router.push({name: 'bye', params: {text: '운동이 종료되었습니다. 감사합니다.'}})
       }).catch(() => {
         this.$q.loading.hide()
         this.$router.push('/error')

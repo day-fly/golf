@@ -77,7 +77,7 @@ export default {
 
             //현재 이용중인 유저일 경우
             if(data.usingUser){
-              await this.forwardPage('usingUserAction')
+              await this.forwardPage('usingUserAction', data)
               return
             }
             //현재 대기열에 들어가있는 유저일 경우
@@ -98,21 +98,18 @@ export default {
               //
               // }
             }
-
-
-
           })
           .catch(() => {
             this.$router.push('error')
           })
     },
-    async forwardPage(pageName){
+    async forwardPage(pageName, data){
       this.$router.push({
-        name: pageName, params: {
+        name: pageName, params: Object.assign({
           userDong: this.userDong,
           userHo: this.userHo,
           userName: this.userName
-        }
+        },data)
       })
     }
   }

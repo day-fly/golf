@@ -13,4 +13,5 @@ public class UserStatusResponse {
     private boolean isUsingUser; //현재 사용중인 USER 인지 체크
     private boolean isWaitingUser; //현재 대기중인 USER 인지 체크
     private boolean isExistWaitingUser; //대기중인 USER가 있는지 체크
+    private String usingUserBoxId; //사용중인 USER의 타석(box) id
 }

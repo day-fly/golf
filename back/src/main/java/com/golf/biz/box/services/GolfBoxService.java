@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,6 @@ public class GolfBoxService {
         golfBox.setStartTime(now.format(formatter));
         //TODO: 65를 DB값으로 바꿔야함
         golfBox.setEndTime(now.plusMinutes(65).format(formatter));
-        golfBox.setEndTime(null);
         golfBoxMapper.update(golfBox);
     }
 
@@ -51,6 +51,7 @@ public class GolfBoxService {
         golfBox.setUserName(null);
         golfBox.setStartTime(null);
         golfBox.setEndTime(null);
+        golfBox.setUseYn("N");
         golfBoxMapper.update(golfBox);
     }
 
@@ -78,12 +79,18 @@ public class GolfBoxService {
             isFullBox = false;
         }
 
-        //내가 현재 사용중인지
-        boolean isUsingUser = list.stream().anyMatch(v ->
+        Optional<GolfBox> usingUserBox = list.stream().filter(v ->
                 golfBoxRequest.getUserDong().equals(v.getUserDong())
                         && golfBoxRequest.getUserHo().equals(v.getUserHo())
                         && golfBoxRequest.getUserName().equals(v.getUserName())
-        );
+        ).findFirst();
+
+        boolean isUsingUser = usingUserBox.isEmpty() ? false : true;
+        String usingUserBoxId = "";
+
+        if(isUsingUser){
+            usingUserBoxId = usingUserBox.get().getId();
+        }
 
         ArrayList<GolfWaitUser> waitingList = golfWaitUserService.getList();
 
@@ -100,6 +107,40 @@ public class GolfBoxService {
                 .isUsingUser(isUsingUser)
                 .isWaitingUser(isWaitingUser)
                 .isExistWaitingUser(waitingList != null && waitingList.size() > 0)
+                .usingUserBoxId(usingUserBoxId)
                 .build();
+    }
+
+    public void extend(GolfBoxRequest golfBoxRequest) {
+        GolfBox one = golfBoxMapper.getOneByUserInfo(golfBoxRequest);
+
+        //30분 연장
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+        one.setEndTime(LocalTime.parse(one.getEndTime(), formatter).plusMinutes(30).format(formatter));
+        golfBoxMapper.update(one);
+    }
+
+    public void move(GolfBoxRequest golfBoxRequest) {
+    }
+
+    //남은시간 10분이내, 대기자가 없는경우 연장 가능
+    public boolean isExtend(GolfBoxRequest golfBoxRequest) {
+        if(golfBoxRequest == null || golfBoxRequest.getUserName() == null){
+            return false;
+        }
+
+        ArrayList<GolfWaitUser> waitingList = golfWaitUserService.getList();
+
+        if(waitingList != null && waitingList.size() > 0){
+            return false;
+        }
+
+        GolfBox one = golfBoxMapper.getOneByUserInfo(golfBoxRequest);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+        LocalTime now = LocalTime.now();
+        if(!now.plusMinutes(11).isAfter(LocalTime.parse(one.getEndTime(), formatter))){
+            return false;
+        }
+        return true;
     }
 }

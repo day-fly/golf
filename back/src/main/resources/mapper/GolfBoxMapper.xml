@@ -7,6 +7,20 @@
         from golf_box
     </select>
 
+    <select id="getOneById" resultType="com.golf.biz.box.entity.GolfBox">
+        select id, name, use_yn, user_name, user_dong, user_ho, start_time, end_time, disable_yn
+          from golf_box
+         where id = #{id}
+    </select>
+
+    <select id="getOneByUserInfo" resultType="com.golf.biz.box.entity.GolfBox">
+        select id, name, use_yn, user_name, user_dong, user_ho, start_time, end_time, disable_yn
+        from golf_box
+        where user_name = #{userName}
+          and user_dong = #{userDong}
+          and user_ho = #{userHo}
+    </select>
+
     <update id="update">
         update golf_box
            set use_yn = #{useYn}

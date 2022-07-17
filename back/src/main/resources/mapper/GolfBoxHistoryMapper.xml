@@ -22,15 +22,8 @@
     </select>
 
     <insert id="insert">
-        insert into golf_box_history
-        update golf_box
-        set use_yn = #{useYn}
-          ,user_name = #{userName}
-          ,user_dong = #{userDong}
-          ,user_ho = #{userHo}
-          ,start_time = #{startTime}
-          ,end_time = #{endTime}
-        where id = #{id}
+        insert into golf_box_history(yyyymmdd, user_name, user_dong, user_ho, box_id, box_end_time, box_start_time)
+        values (#{yyyymmdd}, #{userName}, #{userDong}, #{userHo}, #{boxId}, #{boxEndTime}, #{boxStartTime})
     </insert>
 
 </mapper>
