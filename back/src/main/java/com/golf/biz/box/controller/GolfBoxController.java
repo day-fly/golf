@@ -24,7 +24,7 @@ public class GolfBoxController {
 
     @GetMapping("/list")
     @Operation(summary = "골프 타석 리스트", description = "모든 골프 타석 리스트 정보를 반환한다.")
-    public List<GolfBoxResponse> getDemoList() {
+    public List<GolfBoxResponse> getList() {
         ArrayList<GolfBox> list = golfBoxService.getList();
         return list.stream()
                 .map(this::convertToDto)
@@ -39,8 +39,14 @@ public class GolfBoxController {
 
     @PostMapping("/start")
     @Operation(summary = "골프 타석 시작")
-    public void update(@RequestBody GolfBoxRequest golfBoxRequest) {
+    public void start(@RequestBody GolfBoxRequest golfBoxRequest) {
         golfBoxService.start(golfBoxRequest);
+    }
+
+    @PostMapping("/end")
+    @Operation(summary = "골프 종료")
+    public void end(@RequestBody GolfBoxRequest golfBoxRequest) {
+        golfBoxService.end(golfBoxRequest);
     }
 
     private GolfBoxResponse convertToDto(GolfBox golfBox) {

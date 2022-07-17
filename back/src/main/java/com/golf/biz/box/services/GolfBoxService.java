@@ -8,6 +8,7 @@ import com.golf.biz.box.model.UserStatusResponse;
 import com.golf.biz.boxHistory.entity.GolfBoxHistory;
 import com.golf.biz.boxHistory.model.GolfBoxHistoryRequest;
 import com.golf.biz.boxHistory.services.GolfBoxHistoryService;
+import com.golf.biz.waitUser.entity.GolfWaitUser;
 import com.golf.biz.waitUser.services.GolfWaitUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -37,6 +38,8 @@ public class GolfBoxService {
         GolfBox golfBox = modelMapper.map(golfBoxRequest, GolfBox.class);
         golfBox.setUseYn("Y");
         golfBox.setStartTime(now.format(formatter));
+        //TODO: 65를 DB값으로 바꿔야함
+        golfBox.setEndTime(now.plusMinutes(65).format(formatter));
         golfBox.setEndTime(null);
         golfBoxMapper.update(golfBox);
     }
@@ -82,8 +85,10 @@ public class GolfBoxService {
                         && golfBoxRequest.getUserName().equals(v.getUserName())
         );
 
+        ArrayList<GolfWaitUser> waitingList = golfWaitUserService.getList();
+
         //내가 대기예약을 걸었는지
-        boolean isWaitingUser = golfWaitUserService.getList().stream().anyMatch(v ->
+        boolean isWaitingUser = waitingList.stream().anyMatch(v ->
                         golfBoxRequest.getUserDong().equals(v.getUserDong())
                                 && golfBoxRequest.getUserHo().equals(v.getUserHo())
                                 && golfBoxRequest.getUserName().equals(v.getUserName())
@@ -94,6 +99,7 @@ public class GolfBoxService {
                 .isFullBox(isFullBox)
                 .isUsingUser(isUsingUser)
                 .isWaitingUser(isWaitingUser)
+                .isExistWaitingUser(waitingList != null && waitingList.size() > 0)
                 .build();
     }
 }

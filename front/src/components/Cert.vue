@@ -76,9 +76,10 @@ export default {
             console.log(data)
 
             //현재 이용중인 유저일 경우
-            // if(data.usingUser){
-            //
-            // }
+            if(data.usingUser){
+              await this.forwardPage('usingUserAction')
+              return
+            }
             //현재 대기열에 들어가있는 유저일 경우
             if (data.waitingUser) {
               await this.forwardPage('cancelWaiting')
@@ -92,7 +93,14 @@ export default {
             } else if (data.firstBooking && data.fullBox) {
               await this.forwardPage('alertFullBox')
               return
+            } else if (!data.firstBooking){
+              // if(data.fullBox){
+              //
+              // }
             }
+
+
+
           })
           .catch(() => {
             this.$router.push('error')
