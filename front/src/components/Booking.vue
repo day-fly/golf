@@ -112,7 +112,7 @@ export default {
     interval = setInterval(() => {
       this.delayTime += 1
       if(this.delayTime > 19){
-        //this.cancel()
+        this.cancel()
       }
     }, 1000)
 
@@ -173,7 +173,6 @@ export default {
       this.showAlert = true
     },
     completeBooking(){
-      console.log(this.usingUserBoxId.length)
       if(this.usingUserBoxId && this.usingUserBoxId.length > 0){
         this.move()
       }else{
